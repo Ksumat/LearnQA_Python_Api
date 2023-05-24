@@ -4,7 +4,7 @@ json_text = '{"messages":[{"message":"This is the first message","timestamp":"20
 pars_json = json.loads(json_text)
 
 second_message = pars_json['messages'][1]
-print(f" это сообщение из задания:  {second_message['message']}")
+print(f"это сообщение из задания:  {second_message['message']}")
 
 for i in pars_json['messages']:
     print(f"это парсинг двух сообщений {i['message']}")
