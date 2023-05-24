@@ -1,4 +1,5 @@
 import requests
+import json
 
 response = requests.post("https://playground.learnqa.ru/api/compare_query_type")
 print(response.text, response.status_code)
@@ -18,7 +19,30 @@ method = [{"method":"GET"},{"method":"POST"},{"method":"PUT"},{"method":"DELETE"
 
 for i in method:
     GET = requests.get("https://playground.learnqa.ru/api/compare_query_type", params=i)
+    print(f"GET {i['method']} {GET.text} {GET.status_code}")
+    if i['method'] == 'GET' and GET.text != '{"success":"!"}':
+        print(f"если запрос GET,а параметр method = {i['method']}, возвращается неправильный ответ = {GET.text}")
+    elif i['method'] != 'GET' and GET.text != 'Wrong method provided':
+        print(f"если запрос GET,а параметр method = {i['method']}, возвращается неправильный ответ = {GET.text}")
+
     POST = requests.post("https://playground.learnqa.ru/api/compare_query_type", data=i)
+    print(f"POST {i['method']} {POST.text} {POST.status_code}")
+    if i['method'] == 'POST' and POST.text != '{"success":"!"}':
+        print(f"если запрос POST,а параметр method = {i['method']}, возвращается неправильный ответ = {POST.text}")
+    elif i['method'] != 'POST' and POST.text != 'Wrong method provided':
+        print(f"если запрос POST,а параметр method = {i['method']}, возвращается неправильный ответ = {POST.text}")
+
     PUT = requests.put("https://playground.learnqa.ru/api/compare_query_type", data=i)
+    print(f"PUT {i['method']} {PUT.text} {PUT.status_code}")
+    if i['method'] == 'PUT' and PUT.text != '{"success":"!"}':
+        print(f"если запрос PUT,а параметр method = {i['method']}, возвращается неправильный ответ = {PUT.text}")
+    elif i['method'] != 'PUT' and PUT.text != 'Wrong method provided':
+        print(f"если запрос PUT,а параметр method = {i['method']}, возвращается неправильный ответ = {PUT.text}")
+
     DELETE = requests.delete("https://playground.learnqa.ru/api/compare_query_type", data=i)
-    print(f"{i},это GET = {GET.text},это POST = {POST.text},это PUT= {PUT.text},это delete = {DELETE.text}")
+    print(f"DELETE {i['method']} {DELETE.text} {DELETE.status_code}")
+    if i['method'] == 'DELETE' and DELETE.text != '{"success":"!"}':
+        print(f"если запрос DELETE,а параметр method = {i['method']}, возвращается неправильный ответ = {DELETE.text}")
+    elif i['method'] != 'DELETE' and DELETE.text != 'Wrong method provided':
+        print(f"если запрос DELETE,а параметр method = {i['method']}, возвращается неправильный ответ = {DELETE.text}")
+#4 если запрос DELETE,а параметр method = GET, возвращается неправильный ответ = {"success":"!"}
