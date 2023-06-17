@@ -40,16 +40,16 @@ class TestUserRegister(BaseCase):
         assert response.content.decode("utf-8") == f"Invalid email format", f"Unexpected response content {response.content}"
 
 #- Создание пользователя без указания одного из полей - с помощью @parametrize необходимо проверить, что отсутствие любого параметра не дает зарегистрировать пользователя
-    @pytest.mark.parametrize('condition', exclude_params)
-    def test_create_user_without_param(self, condition):
+    @pytest.mark.parametrize('param', exclude_params)
+    def test_create_user_without_param(self, param):
         data = self.prepare_registration_data()
-        self.data = data.pop(condition)
+        self.data = data.pop(param)
 
         response = MyRequests.post("/user", data=data)
 
         Assertions.assert_code_status(response, 400)
         assert response.content.decode(
-            "utf-8") == f"The following required params are missed: {condition}", f"User registered without param '{condition}'"
+            "utf-8") == f"The following required params are missed: {param}", f"User registered without param '{param}'"
 
 # - Создание пользователя с очень коротким именем в один символ
 
