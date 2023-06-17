@@ -6,7 +6,7 @@ from lib.assertions import Assertions
 class TestUserGet(BaseCase):
     def test_get_user_details_not_auth(self):
         response = MyRequests.get("/user/2")
-        print(response.content)
+        #print(response.content)
         Assertions.assert_json_has_key(response, "username")
         Assertions.assert_json_has_not_key(response, "email")
         Assertions.assert_json_has_not_key(response, "firstName")
@@ -19,7 +19,7 @@ class TestUserGet(BaseCase):
         }
 
         response1 = MyRequests.post("/user/login", data=data)
-        print(response1.cookies)
+        #print(response1.cookies)
 
         auth_sid = self.get_cookie(response1, "auth_sid")
         token = self.get_header(response1, "x-csrf-token")
@@ -45,7 +45,7 @@ class TestUserGet(BaseCase):
         }
 
         response1 = MyRequests.post("/user/login", data=self.data)
-        print(response1.content)
+        #print(response1.content)
 
         auth_sid = self.get_cookie(response1, "auth_sid")
         token = self.get_header(response1, "x-csrf-token")
