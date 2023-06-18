@@ -76,8 +76,7 @@ class TestUserEdit(BaseCase):
             f"/user/{user_id}",
             data={param: new_value}
         )
-        print(response2.content)
-        print(response2.status_code)
+
         Assertions.assert_code_status(response2, 400)
         assert response2.content.decode("utf-8") == f"Auth token not supplied"
 
@@ -117,7 +116,7 @@ class TestUserEdit(BaseCase):
         token = self.get_header(response2, "x-csrf-token")
 
         #Edit
-        new_value = "Chededg@aValue.com"
+        new_value = f"test" + str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) + "@test.ru"
 
         response3 = MyRequests.put(
             f"/user/{f_user_id}",
@@ -152,7 +151,7 @@ class TestUserEdit(BaseCase):
         Assertions.assert_json_value_by_name(
             response4,
             param,
-            {register_data_first[param]},
+            register_data_first[param],
             f"For another user was changed param = {param}"
         )
 
