@@ -1,3 +1,5 @@
+import allure
+
 from lib.my_requests import MyRequests
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
@@ -6,7 +8,7 @@ import string
 import pytest
 import random
 
-
+@allure.epic('Registered cases')
 class TestUserRegister(BaseCase):
     exclude_params = [
         ("username"),
@@ -15,11 +17,18 @@ class TestUserRegister(BaseCase):
         ("email"),
         ("password")
     ]
+
+    @allure.title("Test create user successfully")
+    @allure.severity("blocker")
+    @allure.feature("test_create_user_positive")
+    @allure.story("Создаем юзера с правильными данными")
     def test_create_user_successfuly(self):
         data = self.prepare_registration_data()
         response = MyRequests.post("/user", data=data)
         Assertions.assert_code_status(response, 200)
         Assertions.assert_json_has_key(response, "id")
+    @allure.feature("test_create_user_negative")
+    @allure.story("Создаем юзера с уже существующим Email")
     def test_crete_user_with_existing_email(self):
         email = 'vinkotov@example.com'
         data = self.prepare_registration_data(email)
@@ -30,6 +39,8 @@ class TestUserRegister(BaseCase):
         assert response.content.decode("utf-8") == f"Users with email '{email}' already exists", f"Unexpected response content {response.content}"
 
 # - Создание пользователя с некорректным email - без символа @
+    @allure.feature("test_create_user_negative")
+    @allure.story("Создаем юзера с невалидным Email")
     def test_create_user_with_email_without_sym(self):
         email = f"test" + str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) + "test.ru"
         data = self.prepare_registration_data(email)
@@ -40,6 +51,8 @@ class TestUserRegister(BaseCase):
         assert response.content.decode("utf-8") == f"Invalid email format", f"Unexpected response content {response.content}"
 
 #- Создание пользователя без указания одного из полей - с помощью @parametrize необходимо проверить, что отсутствие любого параметра не дает зарегистрировать пользователя
+    @allure.feature("test_create_user_negative")
+    @allure.story("Создаем юзера без обязательных параметров")
     @pytest.mark.parametrize('param', exclude_params)
     def test_create_user_without_param(self, param):
         data = self.prepare_registration_data()
@@ -53,6 +66,8 @@ class TestUserRegister(BaseCase):
 
 # - Создание пользователя с очень коротким именем в один символ
 
+    @allure.feature("test_create_user_negative")
+    @allure.story("Создаем юзера с коротким именем")
     def test_create_user_with_short_name(self):
         data = self.prepare_registration_data()
         data['firstName'] = random.choice(string.ascii_letters)
@@ -64,6 +79,8 @@ class TestUserRegister(BaseCase):
 
 #
 # - Создание пользователя с очень длинным именем - длиннее 250 символов
+    @allure.feature("test_create_user_negative")
+    @allure.story("Создаем юзера с длинным именем")
     def test_create_user_with_long_name(self):
         data = self.prepare_registration_data()
         data['firstName'] = ''.join(random.choices(string.ascii_lowercase, k=255))
